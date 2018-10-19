@@ -17,3 +17,16 @@ config-debug.txt
 # KDevelop files
 .kdev4/
 xmr-stak.kdev4
+
+# Idea/Clion project files
+cmake-build-release/
+cmake-build-debug/
+\.idea/
+
+# MacOS files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*

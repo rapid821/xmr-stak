@@ -1,7 +1,7 @@
 ###### fireice-uk's and psychocrypt's
 # XMR-Stak - Cryptonight All-in-One Mining Software
 
-**You must update to version [2.5.1-hide-2.0.0](https://github.com/rapid821/xmr-stak-hide/releases/tag/2.5.1-hide-2.0.0) before October 18th 2018, if you want to mine Monero.**
+**You must update to version [2.5.1-hide-2.0.0+](https://github.com/rapid821/xmr-stak-hide/releases) before October 18th 2018, if you want to mine Monero.**
 
 XMR-Stak is a universal Stratum pool miner. This miner supports CPUs, AMD and NVIDIA GPUs and can be used to mine the crypto currencies Monero, Aeon and many more Cryptonight coins.
 

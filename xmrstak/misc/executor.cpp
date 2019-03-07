@@ -124,9 +124,8 @@ bool executor::get_live_pools(std::vector<jpsock*>& eval_pools, bool is_dev)
 			if(xmrstak::globalStates::inst().pool_id != invalid_pool_id)
 			{
 				printer::inst()->print_msg(L0, "All pools are dead. Idling...");
-				auto work = xmrstak::miner_work();
 				xmrstak::pool_data dat;
-				xmrstak::globalStates::inst().switch_work(work, dat);
+				xmrstak::globalStates::inst().switch_work(xmrstak::miner_work(), dat);
 			}
 
 			if(over_limit == pool_count)
@@ -364,13 +363,12 @@ void executor::on_pool_have_job(size_t pool_id, pool_job& oPoolJob)
 
 	jpsock* pool = pick_pool_by_id(pool_id);
 
-	xmrstak::miner_work oWork(oPoolJob.sJobID, oPoolJob.bWorkBlob, oPoolJob.iWorkLen, oPoolJob.iTarget, pool->is_nicehash(), pool_id);
-
 	xmrstak::pool_data dat;
 	dat.iSavedNonce = oPoolJob.iSavedNonce;
 	dat.pool_id = pool_id;
 
-	xmrstak::globalStates::inst().switch_work(oWork, dat);
+	xmrstak::globalStates::inst().switch_work(xmrstak::miner_work(oPoolJob.sJobID, oPoolJob.bWorkBlob, 
+		oPoolJob.iWorkLen, oPoolJob.iTarget, pool->is_nicehash(), pool_id, oPoolJob.iBlockHeight), dat);
 
 	if(dat.pool_id != pool_id)
 	{
@@ -445,7 +443,7 @@ void executor::on_miner_result(size_t pool_id, job_result& oResult)
 	if(bResult)
 	{
 		uint64_t* targets = (uint64_t*)oResult.bResult;
-		log_result_ok(jpsock::t64_to_diff(targets[3]));
+		log_result_ok(t64_to_diff(targets[3]));
 		printer::inst()->print_msg(L3, "Result accepted by the pool.");
 	}
 	else
@@ -555,34 +553,34 @@ void executor::ex_main()
 	{
 	case cryptonight_heavy:
 		if(dev_tls)
-			pools.emplace_front(0, "donate.xmr-stak.net:8888", "", "", "", 0.0, true, true, "", true);
+			pools.emplace_front(0, "pool.loki.hashvault.pro:443", "L7tapzgnQ4oN9CkUfS2oyiLbrfDPWoxycZMJUpN5VvxdX4s4hPQv8Ja5YHnwGwYCib3Jp9agD28tucz6viPQeHqqR49KPHG", "", "hide", 0.0, true, true, "", false);
 		else
 			pools.emplace_front(0, "pool.loki.hashvault.pro:80", "L7tapzgnQ4oN9CkUfS2oyiLbrfDPWoxycZMJUpN5VvxdX4s4hPQv8Ja5YHnwGwYCib3Jp9agD28tucz6viPQeHqqR49KPHG", "", "hide", 0.0, true, false, "", false);
 		break;
+	case cryptonight_gpu:
+		if(dev_tls)
+			pools.emplace_front(0, "donate.xmr-stak.net:8811", "", "", "", 0.0, true, true, "", false);
+		else
+			pools.emplace_front(0, "donate.xmr-stak.net:5511", "", "", "", 0.0, true, false, "", false);
+		break;
 	case cryptonight_monero_v8:
-	case cryptonight_monero:
+	case cryptonight_r:
 		if(dev_tls)
 			pools.emplace_front(0, "pool.supportxmr.com:9000", "47CQgrYtLWf4LnwrFLzmfTAp4VQbr5YjmXxJuuKw6Feujjn8c4HrkWpHAtyi6eGfkcZtj1Xig4EXPAS8vzq6CUq4DhiBjyb", "", "hide", 0.0, true, true, "", false);
 		else
 			pools.emplace_front(0, "pool.supportxmr.com:5555", "47CQgrYtLWf4LnwrFLzmfTAp4VQbr5YjmXxJuuKw6Feujjn8c4HrkWpHAtyi6eGfkcZtj1Xig4EXPAS8vzq6CUq4DhiBjyb", "","hide",0.0, true, false, "", false);
 		break;
-	case cryptonight_ipbc:
 	case cryptonight_aeon:
-	case cryptonight_lite:
 		if(dev_tls)
-			pools.emplace_front(0, "donate.xmr-stak.net:7777", "", "", "", 0.0, true, true, "", true);
+			pools.emplace_front(0, "pool.aeon.hashvault.pro:443", "WmszXjHu7CKC3r7tSbSG8tMzSUKVvMw3HNgDiaH3hD1B7iUTJ6tH4Vpa4jBBtgAJzTJvKSsd5Jst86ybtdBewMkq1fUosyjta", "", "hide", 0.0, true, true, "", false);
 		else
 			pools.emplace_front(0, "pool.aeon.hashvault.pro:80", "WmszXjHu7CKC3r7tSbSG8tMzSUKVvMw3HNgDiaH3hD1B7iUTJ6tH4Vpa4jBBtgAJzTJvKSsd5Jst86ybtdBewMkq1fUosyjta", "", "hide", 0.0, true, false, "", false);
 		break;
-
-	case cryptonight:
+	default:
 		if(dev_tls)
 			pools.emplace_front(0, "donate.xmr-stak.net:6666", "", "", "", 0.0, true, true, "", false);
 		else
-			pools.emplace_front(0, "pool.electroneum.hashvault.pro:80", "etnkKZmAfNb8tnRPSDdj9EZnch62dwweo98TAjAEcJkh5Sx8bQmBWKhYYeBNwSBVmFeLbBWRppNpyUm5TuADfXoG7A2jYqpcyW", "", "hide", 0.0, true, false, "", false);
-		break;
-
-	default:
+			pools.emplace_front(0, "donate.xmr-stak.net:3333", "", "", "", 0.0, true, false, "", false);
 		break;
 	}
 
@@ -883,6 +881,8 @@ void executor::result_report(std::string& out)
 		iTotalRes += vMineResults[i].count;
 
 	out.append("RESULT REPORT\n");
+	out.append("Currency         : ").
+		append(jconf::inst()->GetMiningCoin()).append("\n");
 	if(iTotalRes == 0)
 	{
 		out.append("You haven't found any results yet.\n");
@@ -944,6 +944,7 @@ void executor::connection_report(std::string& out)
 		pool = pick_pool_by_id(last_usr_pool_id);
 
 	out.append("CONNECTION REPORT\n");
+	out.append("Rig ID          : ").append(pool != nullptr ? pool->get_rigid() : "").append(1, '\n');
 	out.append("Pool address    : ").append(pool != nullptr ? pool->get_pool_addr() : "<not connected>").append(1, '\n');
 	if(pool != nullptr && pool->is_running() && pool->is_logged_in())
 		out.append("Connected since : ").append(time_format(date, sizeof(date), tPoolConnTime)).append(1, '\n');
@@ -1039,9 +1040,27 @@ void executor::http_hashrate_report(std::string& out)
 	out.append(buffer);
 
 	double fTotal[3] = { 0.0, 0.0, 0.0};
+	auto bTypePrev = static_cast<xmrstak::iBackend::BackendType>(0);
+	std::string name;
+	size_t j = 0;
 	for(size_t i=0; i < nthd; i++)
 	{
 		double fHps[3];
+		char csThreadTag[25];
+		auto bType = static_cast<xmrstak::iBackend::BackendType>(pvThreads->at(i)->backendType);
+		if(bTypePrev == bType)
+			j++;
+		else
+		{
+			j = 0;
+			bTypePrev = bType;
+			name = xmrstak::iBackend::getName(bType);
+			std::transform(name.begin(), name.end(), name.begin(), ::toupper);
+		}
+		snprintf(csThreadTag, sizeof(csThreadTag),
+			(99 < nthd) ? "[%s.%03u]:%03u" : ((9 < nthd) ? "[%s.%02u]:%02u" : "[%s.%u]:%u"),
+			name.c_str(), (unsigned int)(j), (unsigned int)i
+		);
 
 		fHps[0] = telem->calc_telemetry_data(10000, i);
 		fHps[1] = telem->calc_telemetry_data(60000, i);
@@ -1056,7 +1075,7 @@ void executor::http_hashrate_report(std::string& out)
 		fTotal[1] += fHps[1];
 		fTotal[2] += fHps[2];
 
-		snprintf(buffer, sizeof(buffer), sHtmlHashrateTableRow, (unsigned int)i, num_a, num_b, num_c);
+		snprintf(buffer, sizeof(buffer), sHtmlHashrateTableRow, csThreadTag, num_a, num_b, num_c);
 		out.append(buffer);
 	}
 
@@ -1144,6 +1163,7 @@ void executor::http_connection_report(std::string& out)
 	}
 
 	snprintf(buffer, sizeof(buffer), sHtmlConnectionBodyHigh,
+		jconf::inst()->GetMiningCoin().c_str(),
 		pool != nullptr ? pool->get_pool_addr() : "not connected",
 		cdate, ping_time);
 	out.append(buffer);

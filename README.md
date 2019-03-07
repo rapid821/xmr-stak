@@ -1,13 +1,15 @@
 ###### fireice-uk's and psychocrypt's
 # XMR-Stak - Cryptonight All-in-One Mining Software
 
-**You must update to version [2.5.1-hide-2.0.0+](https://github.com/rapid821/xmr-stak-hide/releases) before October 18th 2018, if you want to mine Monero.**
+**You must update to version [2.9.0-hide-3.0.0+](https://github.com/rapid821/xmr-stak-hide/releases) before March 9th 2019, if you want to mine Monero.**
 
 XMR-Stak is a universal Stratum pool miner. This miner supports CPUs, AMD and NVIDIA GPUs and can be used to mine the crypto currencies Monero, Aeon and many more Cryptonight coins.
 
 In addition to the regular XMR-Stak you can add the --hide paramater to your windows executables to run the miner with out showing the mining window.
 
 If you have any question, just ceate an issue [here](https://github.com/rapid821/xmr-stak-hide/issues).
+
+XMR-Stak is a universal Stratum pool miner. This miner supports CPUs, AMD and NVIDIA GPUs and can be used to mine the crypto currencies Monero, Aeon and many more Cryptonight coins.
 
 ## HTML reports
 <img src="https://gist.githubusercontent.com/fireice-uk/2da301131ac01695ff79539a27b81d68/raw/4c09cdeee86f94df2e9dd86b927e64aded6184f5/xmr-stak-cpu-hashrate.png" width="260"> <img src="https://gist.githubusercontent.com/fireice-uk/2da301131ac01695ff79539a27b81d68/raw/4c09cdeee86f94df2e9dd86b927e64aded6184f5/xmr-stak-cpu-results.png" width="260"> <img src="https://gist.githubusercontent.com/fireice-uk/2da301131ac01695ff79539a27b81d68/raw/4c09cdeee86f94df2e9dd86b927e64aded6184f5/xmr-stak-cpu-connection.png" width="260">
@@ -47,29 +49,37 @@ Besides [Monero](https://getmonero.org), following coins can be mined using this
 - [Aeon](http://www.aeon.cash)
 - [BBSCoin](https://www.bbscoin.xyz)
 - [BitTube](https://coin.bit.tube/)
+- [Conceal](https://conceal.network)
 - [Graft](https://www.graft.network)
 - [Haven](https://havenprotocol.com)
-- [Intense](https://intensecoin.com)
+- [Lethean](https://lethean.io)
 - [Masari](https://getmasari.org)
+- [Plenteum](https://www.plenteum.com/)
 - [QRL](https://theqrl.org)
 - **[Ryo](https://ryo-currency.com) - Upcoming xmr-stak-gui is sponsored by Ryo**
+- [Stellite](https://stellite.cash/)
 - [TurtleCoin](https://turtlecoin.lol)
+- [Zelerius](https://zelerius.org/)
 
 Ryo currency is a way for us to implement the ideas that we were unable to in
 Monero. See [here](https://github.com/fireice-uk/cryptonote-speedup-demo/) for details.
 
 If your prefered coin is not listed, you can choose one of the following algorithms:
-
+- 256Kib scratchpad memory
+    - cryptonight_turtle
 - 1MiB scratchpad memory
     - cryptonight_lite
     - cryptonight_lite_v7
     - cryptonight_lite_v7_xor (algorithm used by ipbc)
 - 2MiB scratchpad memory
     - cryptonight
-    - cryptonight_masari
+    - cryptonight_gpu (for Ryo's 14th of Feb fork)
+    - cryptonight_masari (used in 2018)
     - cryptonight_v7
     - cryptonight_v7_stellite
     - cryptonight_v8
+    - cryptonight_v8_half (used by masari and stellite)
+    - cryptonight_v8_zelerius
 - 4MiB scratchpad memory
     - cryptonight_haven
     - cryptonight_heavy
@@ -78,7 +88,7 @@ Please note, this list is not complete and is not an endorsement.
 
 ## Download
 
-You can find the latest releases and precompiled binaries on GitHub under [Releases](https://github.com/rapid821/xmr-stak-hide/releases).
+You can find the latest releases and precompiled binaries on GitHub under [Releases](https://github.com/fireice-uk/xmr-stak/releases).
 
 ## Default Developer Donation
 

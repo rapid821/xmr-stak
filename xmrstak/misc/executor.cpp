@@ -1118,6 +1118,7 @@ void executor::http_result_report(std::string& out)
 	}
 
 	snprintf(buffer, sizeof(buffer), sHtmlResultBodyHigh,
+		jconf::inst()->GetMiningCoin().c_str(),
 		iPoolDiff, iGoodRes, iTotalRes, fGoodResPrc, fAvgResTime, iPoolHashes,
 		int_port(iTopDiff[0]), int_port(iTopDiff[1]), int_port(iTopDiff[2]), int_port(iTopDiff[3]),
 		int_port(iTopDiff[4]), int_port(iTopDiff[5]), int_port(iTopDiff[6]), int_port(iTopDiff[7]),
@@ -1163,7 +1164,7 @@ void executor::http_connection_report(std::string& out)
 	}
 
 	snprintf(buffer, sizeof(buffer), sHtmlConnectionBodyHigh,
-		jconf::inst()->GetMiningCoin().c_str(),
+		pool != nullptr ? pool->get_rigid() : "",
 		pool != nullptr ? pool->get_pool_addr() : "not connected",
 		cdate, ping_time);
 	out.append(buffer);

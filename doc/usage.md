@@ -52,7 +52,6 @@ The miner will automatically detect if CUDA (for NVIDIA GPUs) or OpenCL (for AMD
 ```
 xmr-stak --noCPU
 ```
-**CUDA** is currently not supported. I am currently try to get some performance out it.
 
 ### NVIDIA via OpenCL
 
